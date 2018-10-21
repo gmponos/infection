@@ -57,7 +57,7 @@ class ProcessBuilder
 
         /** @var PhpProcess|Process $process */
         $process = new $processType(
-            $this->testFrameworkAdapter->getCommandLine(
+            $this->testFrameworkAdapter->getInitialTestRunCommandLine(
                 $this->testFrameworkAdapter->buildInitialConfigFile(),
                 $testFrameworkExtraOptions,
                 $includeArgs,
@@ -74,7 +74,7 @@ class ProcessBuilder
     public function getProcessForMutant(MutantInterface $mutant, string $testFrameworkExtraOptions = ''): MutantProcess
     {
         $process = new Process(
-            $this->testFrameworkAdapter->getCommandLine(
+            $this->testFrameworkAdapter->getMutantCommandLine(
                 $this->testFrameworkAdapter->buildMutationConfigFile($mutant),
                 $testFrameworkExtraOptions
             )

@@ -58,6 +58,11 @@ abstract class AbstractTestFrameworkAdapter
      */
     private $cachedIncludedArgs;
 
+    /**
+     * @var string|null
+     */
+    private $cachedVersion;
+
     public function __construct(
         AbstractExecutableFinder $testFrameworkFinder,
         InitialConfigBuilder $initialConfigBuilder,
@@ -77,8 +82,38 @@ abstract class AbstractTestFrameworkAdapter
     abstract public function getName(): string;
 
     /**
-     * Returns array of arguments to pass them into the Symfony Process
+     * Returns array of arguments to pass them into the Initial Run Symfony Process
      *
+     * @param string $configPath
+     * @param string $extraOptions
+     * @param bool $includePhpArgs
+     * @param array $phpExtraArgs
+     *
+     * @return string[]
+     */
+    public function getInitialTestRunCommandLine(
+        string $configPath,
+        string $extraOptions,
+        bool $includePhpArgs,
+        array $phpExtraArgs
+    ): array {
+        return $this->getCommandLine($configPath, $extraOptions, $includePhpArgs, $phpExtraArgs);
+    }
+
+    /**
+     * Returns array of arguments to pass them into the Mutant Symfony Process
+     *
+     * @param string $configPath
+     * @param string $extraOptions
+     *
+     * @return string[]
+     */
+    public function getMutantCommandLine(string $configPath, string $extraOptions): array
+    {
+        return $this->getCommandLine($configPath, $extraOptions);
+    }
+
+    /**
      * @param string $configPath
      * @param string $extraOptions
      * @param bool $includePhpArgs
@@ -162,6 +197,10 @@ abstract class AbstractTestFrameworkAdapter
 
     public function getVersion(): string
     {
+        if ($this->cachedVersion !== null) {
+            return $this->cachedVersion;
+        }
+
         $frameworkPath = $this->testFrameworkFinder->find();
         $phpIfNeeded = $this->isBatchFile($frameworkPath) ? [] : $this->findPhp();
 
@@ -175,7 +214,7 @@ abstract class AbstractTestFrameworkAdapter
 
         $process->mustRun();
 
-        return $this->versionParser->parse($process->getOutput());
+        return $this->cachedVersion = $this->versionParser->parse($process->getOutput());
     }
 
     private function isBatchFile(string $path): bool

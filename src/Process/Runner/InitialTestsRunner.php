@@ -31,12 +31,6 @@ final class InitialTestsRunner
      */
     private $eventDispatcher;
 
-    /**
-     * InitialTestsRunner constructor.
-     *
-     * @param ProcessBuilder $processBuilder
-     * @param EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(ProcessBuilder $processBuilder, EventDispatcherInterface $eventDispatcher)
     {
         $this->processBuilder = $processBuilder;

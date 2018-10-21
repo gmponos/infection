@@ -56,7 +56,7 @@ final class LogVerbosity
             return;
         }
 
-        $io->logUnkownVerbosityOption(self::NORMAL);
+        $io->logUnknownVerbosityOption(self::NORMAL);
         $input->setOption('log-verbosity', self::NORMAL);
     }
 }
