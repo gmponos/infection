@@ -187,7 +187,7 @@ abstract class AbstractTestFrameworkAdapter
 
     public function buildInitialConfigFile(): string
     {
-        return $this->initialConfigBuilder->build();
+        return $this->initialConfigBuilder->build($this->getVersion());
     }
 
     public function buildMutationConfigFile(MutantInterface $mutant): string
@@ -214,7 +214,22 @@ abstract class AbstractTestFrameworkAdapter
 
         $process->mustRun();
 
-        return $this->cachedVersion = $this->versionParser->parse($process->getOutput());
+        $version = null;
+
+        try {
+            $version = $this->versionParser->parse($process->getOutput());
+        } catch (\InvalidArgumentException $e) {
+            $version = 'unknown';
+        } finally {
+            $this->cachedVersion = $version;
+        }
+
+        return $this->cachedVersion;
+    }
+
+    public function getInitialTestsFailRecommendations(string $commandLine): string
+    {
+        return sprintf('Check the executed command to identify the problem: %s', $commandLine);
     }
 
     private function isBatchFile(string $path): bool

@@ -205,7 +205,7 @@ final class InfectionCommand extends BaseCommand
         );
 
         if (!$initialTestSuitProcess->isSuccessful()) {
-            $this->consoleOutput->logInitialTestsDoNotPass($initialTestSuitProcess, $adapter->getName());
+            $this->consoleOutput->logInitialTestsDoNotPass($initialTestSuitProcess, $adapter);
 
             return 1;
         }
