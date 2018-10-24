@@ -17,7 +17,7 @@ class SourceClassTest extends TestCase
      * When one of the test is skipped, we get self::$counter < 4, which will trigger an error.
      *
      * Expected result: random order of these tests should respect `@depends` annotation and do not
-     * produce skipped tests, thanks to `resolveDependencies="true"`flag (or `--resolve-dependencies` option)
+     * produce skipped tests, thanks to `resolveDependencies="true"` flag (or `--resolve-dependencies` option)
      */
     public static function tearDownAfterClass()
     {
